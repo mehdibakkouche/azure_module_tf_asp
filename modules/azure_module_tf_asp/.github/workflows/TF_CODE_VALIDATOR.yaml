@@ -1,0 +1,92 @@
+name: TF CODE PRE-CHECKS AND VALIDATION
+on:
+  push:
+    branches:
+      - dv-**
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+env:
+  TGENV_AUTO_INSTALL: true
+  TFENV_AUTO_INSTALL: true
+jobs:
+  PRE_COMMITS:
+    name: TERRAFORM & TERRAGRUNT SYNTAX AND FORMATING CHECKS VIA PRE-COMMIT
+    # Run on Self-Runner developed and hosted by LV_NEO
+    runs-on: terraform
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout the repository from remote to local
+        uses: actions/checkout@v4
+      # Run Pre-commit hooks for terraform and terragrunt checks, formating, validations
+      - name: Run Global pre-commit
+        run: pre-commit install && pre-commit run -a
+  MODULE_EXAMPLE_INIT_PLAN:
+    needs: PRE_COMMITS
+    name: MODULE_EXAMPLE_INIT_PLAN
+    # Run on Self-Runner developed and hosted by LV_NEO
+    runs-on: terraform
+    # this is needed since we are running terraform with read-only permissions
+    env:
+      ARM_SKIP_PROVIDER_REGISTRATION: true
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout the repository from remote to local
+        uses: actions/checkout@v4
+      # Run Pre-commit hooks for terraform and terragrunt checks, formating, validations
+      - name: Run Global pre-commit
+        run: pre-commit install && pre-commit run -a
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Change to example directory and Terraform Init
+        run: cd example && pwd && ls -lash && terraform init
+      - name: plan hcl for validation
+        run: cd example && pwd && ls -lash && terraform plan
+name: TF CODE PRE-CHECKS AND VALIDATION
+on:
+  push:
+    branches:
+      - dv-**
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+env:
+  TGENV_AUTO_INSTALL: true
+  TFENV_AUTO_INSTALL: true
+jobs:
+  PRE_COMMITS:
+    name: TERRAFORM & TERRAGRUNT SYNTAX AND FORMATING CHECKS VIA PRE-COMMIT
+    # Run on Self-Runner developed and hosted by LV_NEO
+    runs-on: terraform
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout the repository from remote to local
+        uses: actions/checkout@v4
+      # Run Pre-commit hooks for terraform and terragrunt checks, formating, validations
+      - name: Run Global pre-commit
+        run: pre-commit install && pre-commit run -a
+  MODULE_EXAMPLE_INIT_PLAN:
+    needs: PRE_COMMITS
+    name: MODULE_EXAMPLE_INIT_PLAN
+    # Run on Self-Runner developed and hosted by LV_NEO
+    runs-on: terraform
+    # this is needed since we are running terraform with read-only permissions
+    env:
+      ARM_SKIP_PROVIDER_REGISTRATION: true
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout the repository from remote to local
+        uses: actions/checkout@v4
+      # Run Pre-commit hooks for terraform and terragrunt checks, formating, validations
+      - name: Run Global pre-commit
+        run: pre-commit install && pre-commit run -a
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Change to example directory and Terraform Init
+        run: cd example && pwd && ls -lash && terraform init
+      - name: plan hcl for validation
+        run: cd example && pwd && ls -lash && terraform plan
